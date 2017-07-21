@@ -9,8 +9,21 @@ namespace SQL_Deneme
     public class Item
     {
         public int Amount { get; set; }
-        public Book OrderedBook;
-        public string Item_ID;
-        public bool competed;
+        public string BookId;
+        public string ItemId;
+        public bool Competed;
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

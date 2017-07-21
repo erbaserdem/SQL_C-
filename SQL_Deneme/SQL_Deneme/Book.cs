@@ -17,9 +17,10 @@ namespace SQL_Deneme
         public int Stock;
         public string Name;
         public List<double> Ratings = new List<double>();
-        public List<string> Genres = new List<string>();
+
+        public string Genre;
         //public double type;
-        public double Rating;
+        public float Rating;
         public double Price;
         public int Sold;
 
@@ -33,7 +34,6 @@ namespace SQL_Deneme
             return;
         }
 
-
         public void SellBook(IDbConnection db, int amount)
         {
             db.Query<Book>($"Update Books Set Sold ={Sold + amount}, Stock ={Stock - amount} Where ISBN = {ISBN}");
@@ -44,6 +44,54 @@ namespace SQL_Deneme
             return;
         }
 
+        public bool AddBook(IDbConnection db, List<Book> booksFromSql)
+        {
+            if (Program.SelectWithIdAuthor(AuthorId ,db)!=null)// if author does not exist do not add
+            {
+                db.Query($"INSERT INTO BookStore.dbo.Books(AuthorId, Name, PageNumber, Stock, Price) "
+                         + $"Values ('{AuthorId}','{Name}','{PageNumber}','{Stock}','{Price}')");
+                booksFromSql = Program.GetAllBooks(db);
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Author Does not Exist");
+                return false;
+            }
+        }
+
+        public bool DeleteBook(IDbConnection db, List<Book> booksFromSql)
+        {
+            var toBeDeleted = Program.SelectWithIsbnBook(ISBN, db);
+            if (toBeDeleted != null) // if author does not exist do not add
+            {
+                db.Query($"Delete From Books Where ISBN = {ISBN}");
+                booksFromSql = Program.GetAllBooks(db);
+                return true;
+            }
+            else
+            {
+
+                return false;
+            }
+        }
+
+        public void UpdateDataBase(IDbConnection db)
+        {
+
+            string Query = "UPDATE BookStore.dbo.Books " +
+                     $" SET AuthorId = @AuthorId,Price = @Price, Name = @Nam, PageNumber = @PageNumbe, Rating = @Ratin, Sold = @Sol, Genre =@Genre  " +
+                     $" WHERE ISBN = @ISBN";
+
+
+
+            db.Query(Query, new {AuthorId = AuthorId, Nam = Name, Ratin = Rating, Genre = Genre, PageNumbe = PageNumber, ISBN = ISBN , Price = Price, Sol = Sold});
+
+
+
+
+
+        }
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace SQL_Deneme
 
         public static Book SelectWithIsbnBook(string isbn, IDbConnection db)
         {
-            return db.Query<Book>($"Select * From Books Where ISBN = {isbn}").SingleOrDefault();
+            return db.Query<Book>($"Select * From BookStore.dbo.Books Where ISBN = {isbn}").SingleOrDefault();
         }
 
         public static List<Book> GetAllBooks(IDbConnection db)
@@ -59,22 +60,8 @@ namespace SQL_Deneme
             return db.Query<Book>($"Select * From Books").ToList();
         }
 
-
-
-
-
-
-
-
         static void Main(string[] args)
         {
-
-
-
-
-
-
-
 
             const string connection =
                 @"Data Source=HB-IK-61\SQLEXPRESS;Initial Catalog=BookStore;Integrated Security=True";
@@ -95,23 +82,24 @@ namespace SQL_Deneme
               db.DatabaseExists();
               authorFromSqlAuthors= db.GetTable<Author>().ToList();*/
 
-            var authorsFromSql = new List<Author>();
-            authorsFromSql = GetAllAuthors(db);
-            var booksFromSql = new List<Book>();
-            booksFromSql = GetAllBooks(db);
+            var authorsFromSql =GetAllAuthors(db);
+            var booksFromSql = GetAllBooks(db);
+
+
+            var qu = db.Query(
+                "SELECT Books.ISBN, Books.Name, Authors.FirstName, Authors.LastName FROM Authors INNER JOIN Books ON Books.AuthorId = Authors.ID; ");
 
 
 
-            /* List<Book> tryToGetFromSql = new List<Book>();
-             tryToGetFromSql = SomeMethod(" ",conn);
-             */
+            foreach (var book in booksFromSql)
+            {
+                book.UpdateDataBase(db);
+            }
 
-
-            //var qq = authorFromSqlAuthors.Find(aa => aa.Id == 1);
 
 
             db.Close();
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }

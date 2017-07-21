@@ -10,10 +10,22 @@ namespace SQL_Deneme
     {
         public Customer CustomerId;
         public string OrderNo { get; set; }
-        public List<Item> Ordered_Items = new List<Item>();
-        public bool competed;
-        public double cost;
-        public double discount;
+        public List<Item> OrderedItems = new List<Item>();
+        public bool Competed;
+        public double Cost;
+        public double Discount;
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 }
