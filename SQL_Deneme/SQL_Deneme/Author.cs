@@ -26,15 +26,5 @@ namespace SQL_Deneme
 
                 return true;
         }
-
-
-
-
-
-
-
-
-
-
     }
 }

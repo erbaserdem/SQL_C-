@@ -1,0 +1,295 @@
+<Root>
+  <Book>
+    <Author>Andrzej Sapkowski</Author>
+    <Name>The Last Wish</Name>
+    <ISBN>0000011123360</ISBN>
+    <Stock>10</Stock>
+    <Sold>50</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>8</Rating>
+      <Rating>2</Rating>
+      <Rating>6</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Fantasy</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Andrzej Sapkowski</Author>
+    <Name>Sword of Destiny</Name>
+    <ISBN>0000011123361</ISBN>
+    <Stock>6</Stock>
+    <Sold>4</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>8</Rating>
+      <Rating>2</Rating>
+      <Rating>9</Rating>
+      <Rating>1</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Fantasy</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Andrzej Sapkowski</Author>
+    <Name>Blood Of Elves</Name>
+    <ISBN>0000011123362</ISBN>
+    <Stock>10</Stock>
+    <Sold>0</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>2</Rating>
+      <Rating>8</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Fantasy</Genre>
+      <Genre>Adventure</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Andrzej Sapkowski</Author>
+    <Name>Time of Contempt</Name>
+    <ISBN>0000011123363</ISBN>
+    <Stock>10</Stock>
+    <Sold>0</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>8</Rating>
+      <Rating>2</Rating>
+      <Rating>8</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Fantasy</Genre>
+      <Genre>Action</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Andrzej Sapkowski</Author>
+    <Name>Baptism of Fire</Name>
+    <ISBN>0000011123364</ISBN>
+    <Stock>10</Stock>
+    <Sold>0</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>9.7</Rating>
+      <Rating>9.2</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Fantasy</Genre>
+      <Genre>Action</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Andrzej Sapkowski</Author>
+    <Name>The Tower of Swallows</Name>
+    <ISBN>0000011123365</ISBN>
+    <Stock>10</Stock>
+    <Sold>0</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>9.7</Rating>
+      <Rating>8.1</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres />
+  </Book>
+  <Book>
+    <Author>Andrzej Sapkowski</Author>
+    <Name>Lady of The Lake</Name>
+    <ISBN>0000011123366</ISBN>
+    <Stock>9</Stock>
+    <Sold>1</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>9</Rating>
+      <Rating>9.2</Rating>
+      <Rating>8.1</Rating>
+      <Rating>7</Rating>
+      <Rating>9</Rating>
+      <Rating>10</Rating>
+    </Ratings>
+    <Genres />
+  </Book>
+  <Book>
+    <Author>Brandon Sanderson</Author>
+    <Name>Final Empire</Name>
+    <ISBN>0000011123351</ISBN>
+    <Stock>10</Stock>
+    <Sold>0</Sold>
+    <Price>5</Price>
+    <Page_number>650</Page_number>
+    <Ratings>
+      <Rating>5</Rating>
+      <Rating>8</Rating>
+      <Rating>6</Rating>
+      <Rating>9</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Adventure</Genre>
+      <Genre>Action</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Brandon Sanderson</Author>
+    <Name>Well of Ascension</Name>
+    <ISBN>0000011123352</ISBN>
+    <Stock>10</Stock>
+    <Sold>0</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>4</Rating>
+      <Rating>2</Rating>
+      <Rating>8</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Science Fiction</Genre>
+      <Genre>Romance</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Brandon Sanderson</Author>
+    <Name>Hero of Ages</Name>
+    <ISBN>0000011123353</ISBN>
+    <Stock>10</Stock>
+    <Sold>0</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>8</Rating>
+      <Rating>7</Rating>
+      <Rating>8</Rating>
+      <Rating>6</Rating>
+      <Rating>5</Rating>
+      <Rating>4</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Romance</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Brandon Sanderson</Author>
+    <Name>Alloy of Law</Name>
+    <ISBN>0000011123354</ISBN>
+    <Stock>4</Stock>
+    <Sold>6</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>8</Rating>
+      <Rating>2</Rating>
+      <Rating>8</Rating>
+      <Rating>6</Rating>
+      <Rating>3</Rating>
+      <Rating>2</Rating>
+      <Rating>1</Rating>
+      <Rating>10</Rating>
+      <Rating>10</Rating>
+      <Rating>10</Rating>
+      <Rating>10</Rating>
+      <Rating>10</Rating>
+    </Ratings>
+    <Genres />
+  </Book>
+  <Book>
+    <Author>Brandon Sanderson</Author>
+    <Name>Shadows of Self</Name>
+    <ISBN>0000011123355</ISBN>
+    <Stock>9</Stock>
+    <Sold>2</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>8</Rating>
+      <Rating>2</Rating>
+      <Rating>4</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres />
+  </Book>
+  <Book>
+    <Author>Brandon Sanderson</Author>
+    <Name>Bands of Mourning</Name>
+    <ISBN>0000011123356</ISBN>
+    <Stock>10</Stock>
+    <Sold>0</Sold>
+    <Price>5</Price>
+    <Page_number>50</Page_number>
+    <Ratings>
+      <Rating>8</Rating>
+      <Rating>2</Rating>
+      <Rating>5</Rating>
+      <Rating>6</Rating>
+    </Ratings>
+    <Genres />
+  </Book>
+  <Book>
+    <Author>Patrick Rothfuss</Author>
+    <Name>Name Of The Wind</Name>
+    <ISBN>0000000056392</ISBN>
+    <Stock>6</Stock>
+    <Sold>24</Sold>
+    <Price>15</Price>
+    <Page_number>650</Page_number>
+    <Ratings />
+    <Genres>
+      <Genre>Action</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Patrick Rothfuss</Author>
+    <Name>Wise Man''s Fear</Name>
+    <ISBN>0000000000147</ISBN>
+    <Stock>7</Stock>
+    <Sold>13</Sold>
+    <Price>43</Price>
+    <Page_number>1000</Page_number>
+    <Ratings />
+    <Genres>
+      <Genre>Fantasy</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Stephen King</Author>
+    <Name>Salem''s Lot</Name>
+    <ISBN>0000000000013</ISBN>
+    <Stock>8</Stock>
+    <Sold>32</Sold>
+    <Price>5</Price>
+    <Page_number>1500</Page_number>
+    <Ratings>
+      <Rating>10</Rating>
+    </Ratings>
+    <Genres>
+      <Genre>Horror</Genre>
+    </Genres>
+  </Book>
+  <Book>
+    <Author>Stephen King</Author>
+    <Name>The Stand</Name>
+    <ISBN>0000000000830</ISBN>
+    <Stock>9</Stock>
+    <Sold>11</Sold>
+    <Price>23</Price>
+    <Page_number>1500</Page_number>
+    <Ratings />
+    <Genres>
+      <Genre>Action</Genre>
+    </Genres>
+  </Book>
+</Root>

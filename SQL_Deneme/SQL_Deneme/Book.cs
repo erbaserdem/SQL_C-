@@ -20,7 +20,7 @@ namespace SQL_Deneme
 
         public string Genre;
         //public double type;
-        public float Rating;
+        public double Rating;
         public double Price;
         public int Sold;
 

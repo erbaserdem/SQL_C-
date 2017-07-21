@@ -6,13 +6,74 @@ using System.Linq;
 using System.Text;
 using System.Data.Linq;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Dapper;
 
 namespace SQL_Deneme
 {
     class Program
     {
+
+
+        public static void ReadBooksFromFile(List<Book> booksFromSql, string file_name,IDbConnection db)
+        {
+            List<double> ratings = new List<double>();
+            //XML read from file
+            var xml = new XDocument();
+            try
+            {
+                xml = XDocument.Load("Books.xml");
+            }
+            catch
+            {
+                Console.WriteLine("Books File is empty");
+                return;
+            }
+
+
+            var el = xml.Descendants("Book");
+
+            foreach (var bkk in el)
+            {
+
+                var rates = (bkk.Descendants("Rating"));
+                var genrs = (bkk.Descendants("Genre"));
+
+                string author = bkk.Element("Author").Value.ToString();
+                string AuthorId = AuthorIdFromName(db, author); 
+
+                Book a = new Book
+                {
+                    AuthorId =  AuthorId,
+                    PageNumber = Convert.ToInt32(bkk.Element("Page_number").Value.ToString()),
+                    Name = bkk.Element("Name").Value.ToString(),
+                    ISBN = (bkk.Element("ISBN").Value.ToString()),
+                    Stock = Convert.ToInt32(bkk.Element("Stock").Value.ToString()),
+                    Sold = Convert.ToInt32(bkk.Element("Sold").Value.ToString()),
+                    Price = Double.Parse(bkk.Element("Price").Value, CultureInfo.InvariantCulture)
+                };
+                foreach (var rts in rates)
+                {
+                    ratings.Add(Double.Parse(rts.Value, CultureInfo.InvariantCulture));
+                }
+                if (ratings.Count() != 0)
+                    a.Rating = ratings.Average();
+                a.AddBook(db,booksFromSql);
+
+            }
+
+        }
+
+
+        public static string AuthorIdFromName(IDbConnection db,string getId)
+        {
+            var aa = getId.Split(' ');
+            Author getAuthorId = db.Query<Author>($"Select * From Authors Where (FirstName = '{aa[0]}' AND LastName = '{aa[1]}')").SingleOrDefault();
+            return getAuthorId.ID;
+        }
+
 
         public static List<Book> SomeMethod(string fName, SqlConnection conn)
         {
@@ -31,7 +92,7 @@ namespace SQL_Deneme
                         Name = oReader["Name"].ToString(),
                         PageNumber = Convert.ToInt32(oReader["PageNumber"].ToString()),
                         Sold = Convert.ToInt32(oReader["Sold"].ToString()),
-                        Price = Double.Parse(oReader["Price"].ToString(),System.Globalization.CultureInfo.InvariantCulture)
+                        Price = Double.Parse(oReader["Price"].ToString(),CultureInfo.InvariantCulture)
                     };
                     booksToAdd.Add(bookToAdd);
 
@@ -86,15 +147,37 @@ namespace SQL_Deneme
             var booksFromSql = GetAllBooks(db);
 
 
+
+            //You can Read Books From XML File unrecognized authors' books will be discarded
+            //ReadBooksFromFile(booksFromSql, " ", db);
+
             var qu = db.Query(
                 "SELECT Books.ISBN, Books.Name, Authors.FirstName, Authors.LastName FROM Authors INNER JOIN Books ON Books.AuthorId = Authors.ID; ");
+            
 
 
 
+
+            /* Update DB if you have made changes in the objects not in DB
             foreach (var book in booksFromSql)
             {
                 book.UpdateDataBase(db);
             }
+             */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
