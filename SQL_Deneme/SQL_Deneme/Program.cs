@@ -66,14 +66,12 @@ namespace SQL_Deneme
 
         }
 
-
         public static string AuthorIdFromName(IDbConnection db,string getId)
         {
             var aa = getId.Split(' ');
             Author getAuthorId = db.Query<Author>($"Select * From Authors Where (FirstName = '{aa[0]}' AND LastName = '{aa[1]}')").SingleOrDefault();
             return getAuthorId.ID;
         }
-
 
         public static List<Book> SomeMethod(string fName, SqlConnection conn)
         {
@@ -121,6 +119,24 @@ namespace SQL_Deneme
             return db.Query<Book>($"Select * From Books").ToList();
         }
 
+        public static List<Order> GetAllOrders(IDbConnection db)
+        {
+            return db.Query<Order>($"Select * From Orders").ToList();
+        }
+
+        public static List<Item> GetAllItems(IDbConnection db)
+        {
+            return db.Query<Item>($"Select * From Item").ToList();
+        }
+
+        public static List<Customer> GetAllCustomers(IDbConnection db)
+        {
+            return db.Query<Customer>($"Select * From Customer").ToList();
+        }
+
+
+
+
         static void Main(string[] args)
         {
 
@@ -136,6 +152,7 @@ namespace SQL_Deneme
                 Console.WriteLine("Can not establish connection");
                 return;
             }
+
             //DataContext olayini kullanarak class lari ve connectionlari database e gore ayarlarsan direk alabiliyorsun
             //LINQ to SQL bak iyice incee
             /*  List<Author> authorFromSqlAuthors = new List<Author>();
@@ -145,6 +162,25 @@ namespace SQL_Deneme
 
             var authorsFromSql =GetAllAuthors(db);
             var booksFromSql = GetAllBooks(db);
+            var ordersFromSql = GetAllOrders(db);
+            var itemsFromSql = GetAllItems(db);
+            var customersFromSql = GetAllCustomers(db);
+
+            foreach (var book in booksFromSql)
+            {
+                book.AuthorOfBook = SelectWithIdAuthor(book.AuthorId, db);
+                authorsFromSql.Find(authorId=>authorId.ID == book.AuthorId).Books.Add(book);
+            }
+
+            foreach (var item in itemsFromSql)
+            {
+                ordersFromSql.Find(orderid => orderid.OrderNo == item.OrderNo).OrderedItems.Add(item);
+            }
+
+            foreach (var order in ordersFromSql)
+            {
+                customersFromSql.Find(customerid => customerid.ID == order.CustomerId).Orders.Add(order);
+            }
 
 
 
@@ -153,10 +189,6 @@ namespace SQL_Deneme
 
             var qu = db.Query(
                 "SELECT Books.ISBN, Books.Name, Authors.FirstName, Authors.LastName FROM Authors INNER JOIN Books ON Books.AuthorId = Authors.ID; ");
-            
-
-
-
 
             /* Update DB if you have made changes in the objects not in DB
             foreach (var book in booksFromSql)
@@ -168,21 +200,8 @@ namespace SQL_Deneme
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             db.Close();
-            //Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }

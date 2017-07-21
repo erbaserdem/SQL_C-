@@ -17,7 +17,7 @@ namespace SQL_Deneme
         public int Stock;
         public string Name;
         public List<double> Ratings = new List<double>();
-
+        public Author AuthorOfBook;
         public string Genre;
         //public double type;
         public double Rating;

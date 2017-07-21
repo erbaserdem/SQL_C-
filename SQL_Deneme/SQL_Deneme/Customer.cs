@@ -12,5 +12,20 @@ namespace SQL_Deneme
         public string Name;
         public List<Order> Orders = new List<Order>();
         public double MoneySpent;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

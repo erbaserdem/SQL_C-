@@ -12,6 +12,8 @@ namespace SQL_Deneme
         public string BookId;
         public string ItemId;
         public bool Competed;
+        public string OrderNo;
+        public Order Order;
 
 
 
