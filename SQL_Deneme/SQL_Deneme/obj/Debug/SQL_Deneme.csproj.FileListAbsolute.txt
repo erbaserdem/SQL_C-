@@ -1,0 +1,8 @@
+C:\Workspace\SQL_C#\SQL_Deneme\SQL_Deneme\bin\Debug\SQL_Deneme.exe.config
+C:\Workspace\SQL_C#\SQL_Deneme\SQL_Deneme\bin\Debug\SQL_Deneme.exe
+C:\Workspace\SQL_C#\SQL_Deneme\SQL_Deneme\bin\Debug\SQL_Deneme.pdb
+C:\Workspace\SQL_C#\SQL_Deneme\SQL_Deneme\obj\Debug\SQL_Deneme.csprojResolveAssemblyReference.cache
+C:\Workspace\SQL_C#\SQL_Deneme\SQL_Deneme\obj\Debug\SQL_Deneme.exe
+C:\Workspace\SQL_C#\SQL_Deneme\SQL_Deneme\obj\Debug\SQL_Deneme.pdb
+C:\Workspace\SQL_C#\SQL_Deneme\SQL_Deneme\bin\Debug\Dapper.dll
+C:\Workspace\SQL_C#\SQL_Deneme\SQL_Deneme\bin\Debug\Dapper.xml
