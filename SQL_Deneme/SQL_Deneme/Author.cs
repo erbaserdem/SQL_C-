@@ -19,7 +19,12 @@ namespace SQL_Deneme
         //[Column(Name = "LastName")]
         public string LastName;
 
+        public int NumberOfBooks;
+
         public List<Book> Books = new List<Book>();
+
+
+
 
         public bool AddAuthor(IDbConnection db)
         {
@@ -27,6 +32,17 @@ namespace SQL_Deneme
                          + $"Values ('{FirstName}','{LastName}')");
 
                 return true;
+        }
+
+        public void UpdateDataBase(IDbConnection db)
+        {
+
+            string Query = "UPDATE BookStore.dbo.Authors " +
+                           $" SET FirstName = @FirstNam, LastName = @LastName, NumberOfBooks = @NumberOfBooks " +
+                           $" WHERE ID = @ID";
+
+            db.Query(Query, new { FirstNam = FirstName, Nam = LastName, LastName = LastName, NumberOfBooks = NumberOfBooks, ID = ID});
+
         }
 
 

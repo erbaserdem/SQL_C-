@@ -34,22 +34,35 @@ namespace SQL_Deneme
             return;
         }
 
-        public void SellBook(IDbConnection db, int amount)
+        public int SellBook(IDbConnection db, int amount)
         {
-            db.Query<Book>($"Update Books Set Sold ={Sold + amount}, Stock ={Stock - amount} Where ISBN = {ISBN}");
+            if (Stock >= amount)
+            {
 
-            var updated = db.Query<Book>($"Select * From Books Where ISBN = {ISBN}").SingleOrDefault();
-            this.Stock = updated.Stock;
-            this.Sold = updated.Sold;
-            return;
+                db.Query<Book>($"Update Books Set Sold ={Sold + amount}, Stock ={Stock - amount} Where ISBN = {ISBN}");
+                var updated = db.Query<Book>($"Select * From Books Where ISBN = {ISBN}").SingleOrDefault();
+                this.Stock = Stock-amount;
+                this.Sold = Sold + amount;
+                return 0;
+            }
+            else
+            {
+                db.Query<Book>($"Update Books Set Sold ={Sold + Stock}, Stock ={0} Where ISBN = {ISBN}");
+                var updated = db.Query<Book>($"Select * From Books Where ISBN = {ISBN}").SingleOrDefault();
+                this.Stock = 0;
+                this.Sold = Sold + Stock;
+                return amount-Stock;
+            }
+
+
         }
 
         public bool AddBook(IDbConnection db, List<Book> booksFromSql)
         {
             if (Program.SelectWithIdAuthor(AuthorId ,db)!=null)// if author does not exist do not add
             {
-                db.Query($"INSERT INTO BookStore.dbo.Books(AuthorId, Name, PageNumber, Stock, Price) "
-                         + $"Values ('{AuthorId}','{Name}','{PageNumber}','{Stock}','{Price}')");
+                db.Query($"INSERT INTO BookStore.dbo.Books(AuthorId, Name, PageNumber, Stock, Price, Sold) "
+                         + $"Values ('{AuthorId}','{Name}','{PageNumber}','{Stock}','{Price}','{Sold}')");
                 booksFromSql = Program.GetAllBooks(db);
                 return true;
             }
