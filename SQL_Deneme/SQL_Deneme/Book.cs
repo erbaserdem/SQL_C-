@@ -23,14 +23,16 @@ namespace SQL_Deneme
         public double Rating;
         public double Price;
         public int Sold;
+        public int AwaitingOrders;
 
 
-        public void ReStock(IDbConnection db)
+        public void ReStock(IDbConnection db, int amount)
         {
-            db.Query<Book>($"Update Books Set Stock ={Stock  +25} Where ISBN = {ISBN}");
-
+            db.Query<Book>($"Update Books Set Stock ={Stock  +amount +5}, AwaitingOrders ={0} Where ISBN = {ISBN}");
+            Console.WriteLine($"Book {Name} has been restocked considering awaiting orders");
             var updated = db.Query<Book>($"Select * From Books Where ISBN = {ISBN}").SingleOrDefault();
             this.Stock = updated.Stock;
+            this.AwaitingOrders = 0;
             return;
         }
 
@@ -40,9 +42,10 @@ namespace SQL_Deneme
             {
 
                 db.Query<Book>($"Update Books Set Sold ={Sold + amount}, Stock ={Stock - amount} Where ISBN = {ISBN}");
-                var updated = db.Query<Book>($"Select * From Books Where ISBN = {ISBN}").SingleOrDefault();
-                this.Stock = Stock-amount;
-                this.Sold = Sold + amount;
+                Console.WriteLine($"Book: { Name} quantity  {amount} order is complete");
+ 
+                Stock = Stock-amount;
+                Sold = Sold + amount;
                 return 0;
             }
             else
@@ -51,6 +54,8 @@ namespace SQL_Deneme
                 var updated = db.Query<Book>($"Select * From Books Where ISBN = {ISBN}").SingleOrDefault();
                 this.Stock = 0;
                 this.Sold = Sold + Stock;
+                AwaitingOrders += amount - Stock;
+                Console.WriteLine($"Book: {Name} is out of stock please wait for restock");
                 return amount-Stock;
             }
 
@@ -93,12 +98,12 @@ namespace SQL_Deneme
         {
 
             string Query = "UPDATE BookStore.dbo.Books " +
-                     $" SET AuthorId = @AuthorId,Price = @Price, Name = @Nam, PageNumber = @PageNumbe, Rating = @Ratin, Sold = @Sol, Genre =@Genre  " +
+                     $" SET AuthorId = @AuthorId,Price = @Price, Name = @Nam, PageNumber = @PageNumbe, Rating = @Ratin, Sold = @Sol, Genre =@Genre, AwaitingOrders =@AwaitingOrders  " +
                      $" WHERE ISBN = @ISBN";
 
 
 
-            db.Query(Query, new {AuthorId = AuthorId, Nam = Name, Ratin = Rating, Genre = Genre, PageNumbe = PageNumber, ISBN = ISBN , Price = Price, Sol = Sold});
+            db.Query(Query, new {AuthorId = AuthorId, Nam = Name, Ratin = Rating, Genre = Genre, PageNumbe = PageNumber, ISBN = ISBN , Price = Price, Sol = Sold, AwaitingOrders = AwaitingOrders });
 
 
 

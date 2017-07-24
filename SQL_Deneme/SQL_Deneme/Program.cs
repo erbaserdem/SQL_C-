@@ -7,6 +7,7 @@ using System.Text;
 using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -19,14 +20,6 @@ namespace SQL_Deneme
 
     class Program
     {
-
-
-
-
-
-
-
-
         public static void ReadBooksFromFile(List<Book> booksFromSql, string file_name,IDbConnection db)
         {
             List<double> ratings = new List<double>();
@@ -75,6 +68,170 @@ namespace SQL_Deneme
             }
 
         }
+
+        //bunu ve validationlari duzenle
+        public static void ReadOrdersFromCSV(IDbConnection db, List<Order> OrderList, List<Book> Books, string file_name, List<Customer> CustomerList)
+        {
+            //Read Values From the file
+
+
+
+            string[] allLines = File.ReadAllLines(file_name);
+            foreach (var line in allLines)
+            {
+                string ID = string.Empty; string isbn = string.Empty; string amount = string.Empty; string discount_rate = string.Empty;
+                var data = line.Split(',').ToList();
+                ID = data[0];
+                isbn = data[1];
+                amount = data[2];
+                if (data.Count() == 4)
+                    discount_rate = data[3];
+                if (CustomerValidation(ID, CustomerList) & ISBNValidation(isbn, Books) & AmountValidation(amount) & DiscountRateValidation(ref discount_rate)) // After this line it places the order according to the infoprovided
+                {
+                    var discount = 100 - Double.Parse(discount_rate, System.Globalization.CultureInfo.InvariantCulture);
+                    discount = discount / 100;
+                    List<Customer> Precious_Customers = CustomerList.Where(mny => mny.MoneySpent > (CustomerList.Average(mn => mn.MoneySpent) * 10)).ToList(); // Customers whom have spent 10 times more than the average customer gets 10% extra discount
+                    // only if their current discount is less than 50 %
+                    if (discount > 0.5 && Precious_Customers.Find(id => id.ID == ID) != null)
+                    {
+                        discount -= 0.1;
+                    }
+                    Item item = new Item
+                    {
+                        Amount = Convert.ToInt32(amount),
+                        OrderedBook = Books.Find(isb=>isb.ISBN == isbn),
+                        BookId = isbn,
+                    };
+                    Order New_Order = new Order
+                    {
+                        Customer = CustomerList.Find(find => find.ID == ID),
+                        CustomerId = ID,
+                        //OrderNo = (OrderList.Count() + 1).ToString(),
+                        DateOfOrder = DateTime.Now,
+                        Discount = discount
+                    };
+                    New_Order.OrderedItems.Add(item);
+                    New_Order.Cost = New_Order.OrderedItems.Sum(pr => pr.OrderedBook.Price * pr.Amount );
+                    // New_Order.customer.Money_Spent += New_Order.cost;
+                    New_Order.AddOrder(db);
+
+                    item.OrderNo = db.Query<Order>("Select * from BookStore.dbo.Orders").Last().OrderNo;
+                    item.Order = OrderList.Find(no=>no.OrderNo == item.OrderNo);
+                    item.AddItem(db);
+
+                    Console.WriteLine($"Your Order for the book {item.OrderedBook.Name} has been issued with the orderno: {item.OrderNo}");
+                }
+                else
+                    Console.WriteLine("Not a valid input");
+
+            }
+
+
+        }
+
+        public static bool CustomerValidation(string ID, List<Customer> CustomerList)
+        {
+            if (string.IsNullOrWhiteSpace(ID) & string.IsNullOrEmpty(ID))
+            {
+                Console.WriteLine("White space, Empty and NULL ID's are not allowed");
+                return false;
+            }
+            if (!ID.All(str => str >= '0' & str <= '9'))
+            {
+                Console.WriteLine("Customer ID consists only of numerical values");
+                return false;
+            }
+            if (ID.Length > 13)
+            {
+                Console.WriteLine("Customer ID must be a 13 digitnumber. If entered less it will bepadded with 0's.");
+                return false;
+            }
+            if (CustomerList.Find(find => find.ID == ID) == null)
+            {
+                Console.WriteLine("Not a valid CustomerID");
+                return false;
+            }
+
+
+
+            ID = ID.PadLeft(13, '0');
+            return true;
+        }
+
+        public static bool ISBNValidation(string ID, List<Book> Books)
+        {
+
+            if (string.IsNullOrWhiteSpace(ID) & string.IsNullOrEmpty(ID))
+            {
+                Console.WriteLine("White space, Empty and NULL ISBN's are not allowed");
+                return false;
+            }
+            if (!ID.All(str => str >= '0' & str <= '9'))
+            {
+                Console.WriteLine("ISBN consists only of numerical values");
+                return false;
+            }
+            if (ID.Length > 13)
+            {
+                Console.WriteLine("ISBN must be a 13 digitnumber. If entered less it will bepadded with 0's.");
+                return false;
+            }
+            if ((Books.Find(id=>id.ISBN==ID)) == null)
+            {
+                Console.WriteLine("Not a valid ISBN");
+                return false;
+            }
+            return true;
+        }
+
+        public static bool AmountValidation(string ID)
+        {
+            if (string.IsNullOrWhiteSpace(ID) & string.IsNullOrEmpty(ID))
+            {
+                Console.WriteLine("White space, Empty and NULL Amounts are not allowed");
+                return false;
+            }
+            if (!ID.All(str => str >= '0' & str <= '9'))
+            {
+                Console.WriteLine("Amount of book consists only of numerical values");
+                return false;
+            }
+            if (Convert.ToInt32(ID) > 99 && Convert.ToInt32(ID) < 0)
+            {
+                Console.WriteLine("Amount of book to be bought must bebetween 0 an 100");
+                return false;
+            }
+
+
+            return true;
+        }
+
+        public static bool DiscountRateValidation(ref string ID)
+        {
+            if (string.IsNullOrWhiteSpace(ID) & string.IsNullOrEmpty(ID))
+            {
+                ID = "100";
+                return true;
+            }
+
+            if (!ID.All(str => (str >= '0' & str <= '9') || str == '.'))
+            {
+                Console.WriteLine("Discount rate consists only of numerical values and '.' for decimal ones");
+                return false;
+            }
+            if (0 > Double.Parse(ID, System.Globalization.CultureInfo.InvariantCulture) && 100 < Double.Parse(ID, System.Globalization.CultureInfo.InvariantCulture))
+            {
+                Console.WriteLine("Discount rate must be between 0 and 100");
+                return false;
+            }
+
+            return true;
+        }
+
+
+
+
+
 
         public static string AuthorIdFromName(IDbConnection db,string getId)
         {
@@ -197,7 +354,39 @@ namespace SQL_Deneme
             return db.Query<Customer>($"Select * From Customer").ToList();
         }
 
-        public static void ProcessOrders(IDbConnection db, List<Order> ordersFromSql)
+        public static void ManageConnections(IDbConnection db, List<Book> booksFromSql, List<Author> authorsFromSql, List<Order> ordersFromSql, List<Item> itemsFromSql, List<Customer> customersFromSql)
+        {
+            foreach (var book in booksFromSql)
+            {
+                book.AuthorOfBook = authorsFromSql.Find(id=>id.ID == book.AuthorId);
+                authorsFromSql.Find(authorId => authorId.ID == book.AuthorId).Books.Add(book);
+                authorsFromSql.Find(authorId => authorId.ID == book.AuthorId).NumberOfBooks++;
+                authorsFromSql.Find(authorId => authorId.ID == book.AuthorId).UpdateDataBase(db);
+            }
+
+            foreach (var item in itemsFromSql)
+            {
+                item.Cost = booksFromSql.Find(id => id.ISBN == item.BookId).Price * item.Amount;
+                item.UpdateDataBase(db);
+                item.OrderedBook = booksFromSql.Find(id => id.ISBN == item.BookId);
+                if (item.Amount>0)
+                {
+                    ordersFromSql.Find(orderid => orderid.OrderNo == item.OrderNo).Processed = false;
+                }
+                ordersFromSql.Find(orderid => orderid.OrderNo == item.OrderNo).OrderedItems.Add(item);
+                ordersFromSql.Find(orderid => orderid.OrderNo == item.OrderNo).UpdateDataBase(db);
+            }
+
+            foreach (var order in ordersFromSql)
+            {
+                order.Cost = order.OrderedItems.Sum(mny => mny.Cost);
+                order.Customer = customersFromSql.Find(customerid => customerid.ID == order.CustomerId);
+                customersFromSql.Find(customerid => customerid.ID == order.CustomerId).Orders.Add(order);
+                customersFromSql.Find(customerid => customerid.ID == order.CustomerId).UpdateDataBase(db);
+            }
+        }
+
+        public static void ProcessOrders(IDbConnection db, List<Order> ordersFromSql, List<Book> booksFromSql)
         {
             var orderList = ordersFromSql.FindAll((done=>! done.Processed));
             foreach (var order in orderList)
@@ -205,7 +394,10 @@ namespace SQL_Deneme
                 var completed = 0;
                 foreach (var item in order.OrderedItems)
                 {
+                    if (item.Amount <= 0) continue;
+                    order.Customer.MoneySpent += item.Cost * (100 - order.Discount) / 100;
                     item.Amount = item.OrderedBook.SellBook(db, item.Amount);
+                    order.Customer.MoneySpent -= item.OrderedBook.Price * item.Amount * (100 - order.Discount) / 100;
                     completed += item.Amount;
                     item.OrderedBook.UpdateDataBase(db);
                 }
@@ -239,6 +431,17 @@ namespace SQL_Deneme
             }
         }
 
+        public static void RestockBooks(IDbConnection db, List<Book> booksFromSql)
+        {
+            foreach (var book in booksFromSql)
+            {
+                if (book.AwaitingOrders != 0 && book.Stock==0 )
+                {
+                    book.ReStock(db, book.AwaitingOrders);
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
 
@@ -262,33 +465,13 @@ namespace SQL_Deneme
             var itemsFromSql = GetAllItems(db);
             var customersFromSql = GetAllCustomers(db);
 
-            foreach (var book in booksFromSql)
-            {
-                book.AuthorOfBook = SelectWithIdAuthor(book.AuthorId, db);
-                authorsFromSql.Find(authorId=>authorId.ID == book.AuthorId).Books.Add(book);
-                authorsFromSql.Find(authorId => authorId.ID == book.AuthorId).NumberOfBooks++;
-                authorsFromSql.Find(authorId => authorId.ID == book.AuthorId).UpdateDataBase(db);
-            }
+            //ReadOrdersFromCSV(db, ordersFromSql, booksFromSql, "csv.txt", customersFromSql);
+            //ordersFromSql = GetAllOrders(db);
 
-            foreach (var item in itemsFromSql)
-            {
-                item.Cost = SelectWithIsbnBook(item.BookId,db).Price * item.Amount;
-                item.UpdateDataBase(db);
-                item.OrderedBook = SelectWithIsbnBook(item.BookId, db);
-                ordersFromSql.Find(orderid => orderid.OrderNo == item.OrderNo).OrderedItems.Add(item);
-                ordersFromSql.Find(orderid => orderid.OrderNo == item.OrderNo).Cost += item.Cost;
-                ordersFromSql.Find(orderid => orderid.OrderNo == item.OrderNo).UpdateDataBase(db);
-            }
+            ManageConnections(db,booksFromSql,authorsFromSql,ordersFromSql,itemsFromSql,customersFromSql);
 
-            foreach (var order in ordersFromSql)
-            {
-                customersFromSql.Find(customerid => customerid.ID == order.CustomerId).Orders.Add(order);
-                customersFromSql.Find(customerid => customerid.ID == order.CustomerId).MoneySpent += order.Cost;
-                customersFromSql.Find(customerid => customerid.ID == order.CustomerId).UpdateDataBase(db);
-            }
-
-            ProcessOrders(db,ordersFromSql);
-
+            ProcessOrders(db,ordersFromSql,booksFromSql);
+            RestockBooks(db,booksFromSql);
 
             //You can Read Books From XML File unrecognized authors' books will be discarded
             //ReadBooksFromFile(booksFromSql, " ", db);

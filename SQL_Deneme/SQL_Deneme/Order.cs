@@ -23,8 +23,8 @@ namespace SQL_Deneme
 
         public void AddOrder(IDbConnection db)
         {
-            db.Query($"INSERT INTO BookStore.dbo.Order(CustomerId, Cost, Discount, DateOfOrder) "
-                     + $"Values ('{CustomerId}','{Cost}','{Discount}','{DateOfOrder}')");
+            db.Query($"INSERT INTO BookStore.dbo.Orders(CustomerId, Cost, Discount, DateOfOrder) "
+                     + $"Values ('{CustomerId}','{Cost}','{Convert.ToInt32(100 -Discount*100)}','{DateOfOrder.ToString("yyyy-MM-dd h:mm")}')");
             return;
         }
 

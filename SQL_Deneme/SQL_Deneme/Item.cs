@@ -25,8 +25,8 @@ namespace SQL_Deneme
         {
             if (Program.SelectWithIsbnBook(BookId, db) != null) // if author does not exist do not add
             {
-                db.Query($"INSERT INTO BookStore.dbo.Item(BookId, Amount, OrderNo, Cost) "
-                         + $"Values ('{BookId}','{Amount}','{OrderNo}','{Cost}')");
+                db.Query($"INSERT INTO BookStore.dbo.Item(BookId, Amount, OrderNo ) "
+                         + $"Values ('{BookId}','{Amount}','{OrderNo}')");
 
                 return;
             }
