@@ -492,7 +492,5 @@ namespace SQL_Deneme
         }
 
 
-
-
     }
 }
